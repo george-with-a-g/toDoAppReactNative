@@ -1,11 +1,12 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const styles = StyleSheet.create({
-    container: {
+    container: { 
         flex: 1,
-        backgroundColor: 'white',
-        alignItems: 'center'
+    },
+    map: {
+        width: '100%',
+        height: '100%'
     }
 })
-
-export default styles;
+export default styles
