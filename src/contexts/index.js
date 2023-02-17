@@ -11,7 +11,7 @@ const AuthContextProvider = ({children}) => {
     const saveTaskData = async (data, setAllTasks) => {
         try {
             await AsyncStorage.setItem( '@TaskData', JSON.stringify(data) );
-            setAllTasks(data);
+            //setAllTasks(data);
         } catch (error) {
             console.log(error);
         }

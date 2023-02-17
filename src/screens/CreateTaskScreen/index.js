@@ -47,6 +47,7 @@ const CreateTaskScreen = () => {
                     else{
                         allTasks.push(newTaskData);
                         setAllTasks(allTasks);
+                        saveTaskData(allTasks, setAllTasks);
                     }
                 } catch(err){
                     console.warn(err);
@@ -57,6 +58,7 @@ const CreateTaskScreen = () => {
             let newTaskData = {key: newKey, title: value, description: description, complete: false, locationInfo: null, locationInfoClose: null };
             if (allTasks === null){
                 setAllTasks([newTaskData]);
+                saveTaskData(allTasks, setAllTasks);
             }
             else{
                 allTasks.push(newTaskData);

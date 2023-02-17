@@ -7,11 +7,19 @@ import styles from './style';//styles for this screen.
 
 const HomeScreen = () => {
     const navigation = useNavigation();
-    const { setUserLocation, retrieveTaskData, setAllTasks, clearTaskData, allTasks } = useAuthContext();
+    const { setUserLocation, retrieveTaskData, setAllTasks, clearTaskData, allTasks, saveTaskData } = useAuthContext();
 
     useEffect(() => {
-        retrieveTaskData(setAllTasks);
-    }, []);
+        const interval = setInterval(() => {
+            try{
+                if (allTasks.length !== 0){
+                    saveTaskData(allTasks, setAllTasks);
+                }
+            }catch(err){
+            }
+        }, 200);
+        return () => clearInterval(interval);
+    }, [allTasks]);
 
     //get location Permission and location details.
     const [errorMsg, setErrorMsg] = useState(null);
@@ -24,20 +32,8 @@ const HomeScreen = () => {
             }
         };
         requestLocation();
+        retrieveTaskData(setAllTasks);
     }, [])
-    /*
-    useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-                return;
-            }
-            let location = await Location.getCurrentPositionAsync({});
-            setUserLocation(location);
-        })();
-    }, []);
-    */
 
     //function takes to the create task screen
     const goCreateTask = () => {navigation.navigate('CreateTaskScreen')}
