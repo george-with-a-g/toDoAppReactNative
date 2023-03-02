@@ -13,9 +13,11 @@ const styles = StyleSheet.create({
     title: {
         width: '30%',
         fontWeight: 'bold',
+        color: 'black',
         paddingHorizontal: 4
     },
     description: {
+        color: 'black',
         width: '60%'
     },
     icon: {

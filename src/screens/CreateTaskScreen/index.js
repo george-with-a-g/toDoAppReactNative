@@ -54,6 +54,7 @@ const CreateTaskScreen = () => {
                 }
             };
             requestLocation();
+            navigation.navigate('HomeScreen');
         }else{//user does not want location tracked.
             let newTaskData = {key: newKey, title: value, description: description, complete: false, locationInfo: null, locationInfoClose: null };
             if (allTasks === null){
@@ -64,8 +65,8 @@ const CreateTaskScreen = () => {
                 allTasks.push(newTaskData);
                 setAllTasks(allTasks);
             }
+            navigation.navigate('ViewTasks');
         }
-        navigation.navigate('HomeScreen');
     }
     return(
         <View style={styles.container}>

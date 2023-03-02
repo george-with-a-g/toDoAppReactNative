@@ -7,7 +7,7 @@ import styles from './style';//styles for this screen.
 
 const HomeScreen = () => {
     const navigation = useNavigation();
-    const { setUserLocation, retrieveTaskData, setAllTasks, clearTaskData, allTasks, saveTaskData } = useAuthContext();
+    const { setUserLocation, userLocation, retrieveTaskData, setAllTasks, clearTaskData, allTasks, saveTaskData } = useAuthContext();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -26,9 +26,10 @@ const HomeScreen = () => {
     useEffect(() => {
         const requestLocation = async () => {
             try{
+                console.log("trying to get the location");
                 Geolocation.getCurrentPosition(info => setUserLocation(info));
             } catch(err){
-                console.warn(err);
+                console.warn(err, "is the error");
             }
         };
         requestLocation();

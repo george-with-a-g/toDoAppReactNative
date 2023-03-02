@@ -12,10 +12,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 30,
         marginBottom: 2,
+        color: 'black'
     },
     description: {
         fontWeight: 'bold',
         fontSize: 16,
+        color: 'black',
         marginBottom: 24
     },
     taskContainer: {

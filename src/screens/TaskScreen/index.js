@@ -1,8 +1,9 @@
 import { View, Image, Text, TouchableOpacity, Button, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';//this will navigate the app from screen to screen
 import { Checkbox } from 'react-native-paper';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './style';//styles for this screen.
+import Geolocation from '@react-native-community/geolocation';
 import { useAuthContext } from '../../contexts'; 
 
 const TaskScreen  = ({route}) => {
@@ -12,10 +13,25 @@ const TaskScreen  = ({route}) => {
     const [checked, setChecked] = useState(route.params.complete);
     const [creationLocation, setCreationLocation] = useState(route.params.locationInfo);
     const [completionLocation, setCompletionLocation] = useState(route.params.locationInfoClose);
+
+    const requestLocation = () => {
+        try{
+            Geolocation.getCurrentPosition(info => setUserLocation(info));
+        } catch(err){
+            console.warn(err);
+        }
+    };
+
     const modifyCompletionStatus = () => {
         setChecked(!checked);
         //location is tracked so it will also track location on closing the task.
         if (route.params.locationInfo){
+            console.log(creationLocation, "creation location");
+            console.log(userLocation);
+            requestLocation();
+            console.log(userLocation, "changed");
+            console.log("");
+
             setAllTasks(prevState => prevState.map(item => {
                 if (item.key === route.params.id) {
                     return {
@@ -85,7 +101,7 @@ const TaskScreen  = ({route}) => {
             }
             { route.params.locationInfo && checked ? (
                 <View style={{ width: '100%', paddingHorizontal: '5%' }}>
-                    <Text style={{ color: '#4e46e5' }} onPress={goToMapScreen}>Location when task was completed.</Text>
+                    <Text style={{ color: '#4e46e5' }} onPress={goToMapScreenClosed}>Location when task was completed.</Text>
                 </View>
                 ) : (
                 <View style={{ width: '100%', paddingHorizontal: '5%' }}>
