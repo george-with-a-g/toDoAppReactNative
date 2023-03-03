@@ -25,15 +25,16 @@ const HomeScreen = () => {
     const [errorMsg, setErrorMsg] = useState(null);
     useEffect(() => {
         const requestLocation = async () => {
-            try{
-                console.log("trying to get the location");
-                Geolocation.getCurrentPosition(info => setUserLocation(info));
-            } catch(err){
-                console.warn(err, "is the error");
-            }
+            Geolocation.getCurrentPosition(position => {
+                setUserLocation(position);
+            },
+            error => console.log(error),
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+            );
         };
-        requestLocation();
+
         retrieveTaskData(setAllTasks);
+        const locationRequestInterval = setInterval(requestLocation, 1000);
     }, [])
 
     //function takes to the create task screen
@@ -69,3 +70,12 @@ const HomeScreen = () => {
     )
 }
 export default HomeScreen
+/*
+
+{ userLocation ? (
+    <Text>{userLocation?.coords?.latitude ?? 'unknown'} -latitude {userLocation?.coords?.longitude ?? 'unknown'} -longitude</Text>
+    ) : (
+    <Text>{'unknown'} -lat. {'unknown'} -longitude</Text>
+    )
+}
+*/

@@ -8,13 +8,13 @@ import { useAuthContext } from '../../contexts';
 
 const TaskScreen  = ({route}) => {
     const navigation = useNavigation();
-    const { setUserLocation, allTasks, setAllTasks, userLocation } = useAuthContext();
+    const { setUserLocation, allTasks, setAllTasks, userLocation, saveTaskData, retrieveTaskData } = useAuthContext();
 
     const [checked, setChecked] = useState(route.params.complete);
     const [creationLocation, setCreationLocation] = useState(route.params.locationInfo);
     const [completionLocation, setCompletionLocation] = useState(route.params.locationInfoClose);
 
-    const requestLocation = () => {
+    const requestLocationAtTask = () => {
         try{
             Geolocation.getCurrentPosition(info => setUserLocation(info));
         } catch(err){
@@ -26,11 +26,8 @@ const TaskScreen  = ({route}) => {
         setChecked(!checked);
         //location is tracked so it will also track location on closing the task.
         if (route.params.locationInfo){
-            console.log(creationLocation, "creation location");
-            console.log(userLocation);
-            requestLocation();
-            console.log(userLocation, "changed");
-            console.log("");
+            requestLocationAtTask();
+            setCompletionLocation(userLocation);
 
             setAllTasks(prevState => prevState.map(item => {
                 if (item.key === route.params.id) {
@@ -53,6 +50,7 @@ const TaskScreen  = ({route}) => {
                 return item;
             }));
         }
+        saveTaskData(allTasks, setAllTasks);
     }
     
     //used for going to map screen to view location task opened at
@@ -64,7 +62,7 @@ const TaskScreen  = ({route}) => {
     //used for going to map screen to view location task closed at
     const goToMapScreenClosed = () => {
         navigation.navigate('MapScreen', {
-            locationInfo: route.params.locationInfoClose
+            locationInfo: completionLocation
         });
     }
     return(
@@ -90,7 +88,7 @@ const TaskScreen  = ({route}) => {
             </View>
             { route.params.locationInfo ? (
                 <View style={{ width: '100%', paddingHorizontal: '5%' }}>
-                    <Text style={{ color: '#4e46e5' }} onPress={goToMapScreen}>Location when task was created.</Text>
+                    <Text style={{ color: '#4e46e5' }} onPress={goToMapScreen}>Location when task was created. {creationLocation.coords.latitude} - lat. {creationLocation.coords.longitude} - longitude. </Text>
                 </View>
                 ) : (
                 <View style={{ width: '100%', paddingHorizontal: '5%' }}>
@@ -100,8 +98,8 @@ const TaskScreen  = ({route}) => {
                 )
             }
             { route.params.locationInfo && checked ? (
-                <View style={{ width: '100%', paddingHorizontal: '5%' }}>
-                    <Text style={{ color: '#4e46e5' }} onPress={goToMapScreenClosed}>Location when task was completed.</Text>
+                <View style={{ width: '100%', paddingHorizontal: '5%', marginTop: 15 }}>
+                    <Text style={{ color: '#4e46e5' }} onPress={goToMapScreenClosed}>Location when task was completed. {completionLocation.coords.latitude} - lat. {completionLocation.coords.longitude} - longitude.</Text>
                 </View>
                 ) : (
                 <View style={{ width: '100%', paddingHorizontal: '5%' }}>
